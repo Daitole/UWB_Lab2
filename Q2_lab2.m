@@ -2,7 +2,7 @@ clear all;
 close all;
 
 [serial_1, time_1, signal_1] = textread('basicpulsewo_matched_load.txt', '%f %f %f');
-[serial_2, time_2, signal_2] = textread('basicpulsewo_another_load.txt', '%f %f %f');
+[serial_2, time_2, signal_2] = textread('basicpulsewo_another_finger.txt', '%f %f %f');
 
 % plot(time_1, signal_1, 'LineWidth', 2);
 % hold on;
@@ -10,8 +10,8 @@ close all;
 
 grid on;
 
-inc = signal_1;
-ref = signal_2 - signal_1;
+inc = signal_1 + abs(signal_1(1));
+ref = signal_2 + abs(signal_2(1)) - (inc);
 
 %% PLot of incident and reflected pulses
 
@@ -27,8 +27,11 @@ legend({'Incident Pulse', 'Reflected Pulse'}, 'FontSize', 12, 'FontWeight', 'bol
 
 %print('ir_short', '-depsc');
 
-print('ir_another_load', '-depsc');
-%print('ir_another_load_finger', '-depsc');
+%print('ir_another_load', '-depsc');
+
+print('ir_another_load_finger', '-depsc');
+
+%print('ir_another_load_less', '-depsc');
 
 %% Window to take average: 
 

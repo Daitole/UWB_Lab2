@@ -2,7 +2,7 @@ clear all;
 close all;
 
 [serial_1, time_1, signal_1] = textread('mono2048.txt', '%f %f %f');
-[serial_2, time_2, signal_2] = textread('monotube.txt', '%f %f %f'); % change it with the DUT
+[serial_2, time_2, signal_2] = textread('monowavefil2.txt', '%f %f %f'); % change it with the DUT
 %[serial_2, time_2, signal_2] = textread('monowaveguide.txt', '%f %f %f');
 %[serial_2, time_2, signal_2] = textread('monotube.txt', '%f %f %f');
 
@@ -68,10 +68,10 @@ ylabel('P_{xx}, P_{yy} (dB scale)', 'FontSize', 12, 'FontWeight', 'bold');
 title('Power Spectrum of mono pulse and response from in DUT', 'FontSize', 12, 'FontWeight', 'bold');
 legend({'Pulse', 'DUT'}, 'FontSize', 12, 'FontWeight', 'bold');
 grid on;
-xlim([0.1 10])
+xlim([0.1 12])
 %print('Power_Spectrum_db_wfil', '-depsc');
 %print('Power_Spectrum_db_wg', '-depsc');
-print('Power_Spectrum_db_wtube', '-depsc');
+%print('Power_Spectrum_db_wtube', '-depsc');
 
 figure(2);
 plot(frequencies_1(1:end), (Pyy_1(1:N1/2+1)), 'LineWidth', 2);
@@ -85,10 +85,10 @@ ylabel('P_{xx}, P_{yy} (Linear Scale)', 'FontSize', 12, 'FontWeight', 'bold');
 title('Power Spectrum of mono pulse and response from in DUT', 'FontSize', 12, 'FontWeight', 'bold');
 legend({'Pulse', 'DUT'}, 'FontSize', 12, 'FontWeight', 'bold');
 grid on;
-xlim([0.1 10])
+xlim([0.1 12])
 %print('Power_Spectrum_linear_wfil', '-depsc');
 %print('Power_Spectrum_linear_wg', '-depsc');
-print('Power_Spectrum_linear_tube', '-depsc');
+%print('Power_Spectrum_linear_tube', '-depsc');
 
 
 %% Transfer Function: 
@@ -99,31 +99,31 @@ h = (signal_freq_2)./(signal_freq_1);
 
 
 figure(3);
-plot(frequencies_2(1:end), 0.5 .* db(abs((h(1:N1/2+1).^2)./N1)), 'LineWidth', 2, 'color', [0.6350, 0.0780, 0.1840]);
+plot(frequencies_2(1:end), db(abs(h(1:N1/2+1))), 'LineWidth', 2, 'color', [0.6350, 0.0780, 0.1840]);
 
 xlabel('Frequencies(GHz)', 'FontSize', 12, 'FontWeight', 'bold');
-ylabel('P_{hh} (dB scale)', 'FontSize', 12, 'FontWeight', 'bold');
-title('Power Spectrum of the transfer function', 'FontSize', 12, 'FontWeight', 'bold');
+ylabel('V_{hh} (dB scale)', 'FontSize', 12, 'FontWeight', 'bold');
+title('Absolute value Spectrum of the transfer function', 'FontSize', 12, 'FontWeight', 'bold');
 
 grid on;
-xlim([0.1 10])
-%print('Transfer_dB_wfil', '-depsc');
-%print('Transfer_dB_wg', '-depsc');
-print('Transfer_dB_tube', '-depsc');
+xlim([0.1 13])
+print('Transfer_dB_wfil_mag', '-depsc');
+%print('Transfer_dB_wg_mag', '-depsc');
+%print('Transfer_dB_tube_mag', '-depsc');
 
 figure(4);
-plot(frequencies_2(1:end), (abs((h(1:N1/2+1).^2)./N1)), 'LineWidth', 2, 'color', [0.6350, 0.0780, 0.1840]);
+plot(frequencies_2(1:end), abs(h(1:N1/2+1)), 'LineWidth', 2, 'color', [0.6350, 0.0780, 0.1840]);
 
 xlabel('Frequencies(GHz)', 'FontSize', 12, 'FontWeight', 'bold');
-ylabel('P_{hh} (Linear Scale)', 'FontSize', 12, 'FontWeight', 'bold');
-title('Power Spectrum of the transfer function', 'FontSize', 12, 'FontWeight', 'bold');
+ylabel('V_{hh} (Linear Scale (mVolt))', 'FontSize', 12, 'FontWeight', 'bold');
+title('Absolute value Spectrum of the transfer function', 'FontSize', 12, 'FontWeight', 'bold');
 
 grid on;
-xlim([0.1 10])
+xlim([0.1 13])
 
-%print('Transfer_linear_wfil', '-depsc');
-%print('Transfer_linear_wg', '-depsc');
-print('Transfer_linear_tube', '-depsc');
+print('Transfer_linear_wfil_mag', '-depsc');
+%print('Transfer_linear_wg_mag', '-depsc');
+%print('Transfer_linear_tube_mag', '-depsc');
 % Windowing to remove noise
 
 win_ = zeros(size(h, 1), size(h, 2));
@@ -143,13 +143,13 @@ freq = fs_1 .* (0:N1-1) ./ N1;
 
 count = 0;
 for i = 1:size(freq, 2)
-    if freq(i) > 0.1 && freq(i) < 10 %change it to 13 for wavefilter 
+    if freq(i) > 0.1 && freq(i) < 13 %change it to 13 for wavefilter 
         count = count + 1;
     end
 end
 
 for i = 1:size(freq, 2)
-    if freq(i) > 0.1 && freq(i) < 10 %change it to 13 for wavefilter
+    if freq(i) > 0.1 && freq(i) < 13 %change it to 13 for wavefilter
         win_(i) = sin((i - 0.1) .* pi ./ count).^2;
         win_(N1 - i) = win_(i);
     end
@@ -186,7 +186,7 @@ grid on;
 
 %print('Transfer_time_wfil', '-depsc');
 %print('Transfer_time_wg', '-depsc');
-print('Transfer_time_tube', '-depsc');
+%print('Transfer_time_tube', '-depsc');
 
 % figure(7);
 % plot(time_1(1:end), real(h_t_1(1:end)), 'LineWidth', 2,  'color', [0.6350, 0.0780, 0.1840]);
