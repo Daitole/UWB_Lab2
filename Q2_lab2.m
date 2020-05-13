@@ -2,7 +2,7 @@ clear all;
 close all;
 
 [serial_1, time_1, signal_1] = textread('basicpulsewo_matched_load.txt', '%f %f %f');
-[serial_2, time_2, signal_2] = textread('basicpulsewo_another_finger.txt', '%f %f %f');
+[serial_2, time_2, signal_2] = textread('basicpulsewo_matched_load.txt', '%f %f %f');
 
 % plot(time_1, signal_1, 'LineWidth', 2);
 % hold on;
@@ -22,14 +22,14 @@ grid on;
 
 xlabel('time(nS)', 'FontSize', 12, 'FontWeight', 'bold');
 ylabel('Incident and Reflected Pulse', 'FontSize', 12, 'FontWeight', 'bold');
-title('Time domain plot of incident and reflected pulses for a finger pressed at the end', 'FontSize', 12, 'FontWeight', 'bold');
+title('Time domain plot of incident and reflected pulses', 'FontSize', 12, 'FontWeight', 'bold');
 legend({'Incident Pulse', 'Reflected Pulse'}, 'FontSize', 12, 'FontWeight', 'bold', 'Location', 'northeast');
 
 %print('ir_short', '-depsc');
 
 %print('ir_another_load', '-depsc');
 
-print('ir_another_load_finger', '-depsc');
+%print('ir_another_load_finger', '-depsc');
 
 %print('ir_another_load_less', '-depsc');
 

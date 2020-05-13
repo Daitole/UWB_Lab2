@@ -107,7 +107,7 @@ title('Absolute value Spectrum of the transfer function', 'FontSize', 12, 'FontW
 
 grid on;
 xlim([0.1 13])
-print('Transfer_dB_wfil_mag', '-depsc');
+%print('Transfer_dB_wfil_mag', '-depsc');
 %print('Transfer_dB_wg_mag', '-depsc');
 %print('Transfer_dB_tube_mag', '-depsc');
 
@@ -121,7 +121,7 @@ title('Absolute value Spectrum of the transfer function', 'FontSize', 12, 'FontW
 grid on;
 xlim([0.1 13])
 
-print('Transfer_linear_wfil_mag', '-depsc');
+%print('Transfer_linear_wfil_mag', '-depsc');
 %print('Transfer_linear_wg_mag', '-depsc');
 %print('Transfer_linear_tube_mag', '-depsc');
 % Windowing to remove noise
@@ -206,3 +206,60 @@ grid on;
 % plot(time_1, signal_1);
 % hold on;
 % plot(time_1, s);
+
+%-------------------------------
+
+% Bonus Thing
+
+N_noise = length(frequencies_1(frequencies_1>20));
+
+Noise = sum((signal_freq_1(frequencies_1 > 20))) ./ N_noise;
+
+SNR = max(abs(signal_freq_1))./abs(Noise);
+
+sigma = max(signal_1)./SNR;
+
+P_n = N1 .* sigma.^2;
+
+beta = P_n ./ (mean(Pyy_1));
+
+H = (signal_freq_2 .* conj(signal_freq_1)) ./ (signal_freq_1 .* conj(signal_freq_1) + beta);
+
+H_new = H .* win_;
+
+H_t = ifft(H_new);
+
+figure(9);
+plot(frequencies_2(1:end), abs(H(1:N1/2+1)), 'LineWidth', 2, 'color', [0.6350, 0.0780, 0.1840]);
+
+xlabel('Frequencies(GHz)', 'FontSize', 12, 'FontWeight', 'bold');
+ylabel('V_{hh} (Linear Scale (mVolt))', 'FontSize', 12, 'FontWeight', 'bold');
+title('Absolute value Spectrum of the transfer function', 'FontSize', 12, 'FontWeight', 'bold');
+grid on;
+xlim([0.1 13]);
+print('bonus_wavefil_l', '-depsc');
+
+
+figure(10);
+
+plot(frequencies_2(1:end), 0.5 .* db(abs(H(1:N1/2+1))), 'LineWidth', 2, 'color', [0.25, 0.25, 0.25]);
+
+xlim([0.1 6]);
+
+xlabel('Frequencies(GHz)', 'FontSize', 12, 'FontWeight', 'bold');
+ylabel('V_{hh} (dB scale)', 'FontSize', 12, 'FontWeight', 'bold');
+title('Absolute value Spectrum of the transfer function', 'FontSize', 12, 'FontWeight', 'bold');
+
+grid on;
+%print('bonus_wg_db', '-depsc');
+
+figure(11);
+
+plot(time_1(1:end), real(H_t(1:end)), 'LineWidth', 2, 'color', [0.6350, 0.0780, 0.1840]);
+
+xlabel('time(nS)', 'FontSize', 12, 'FontWeight', 'bold');
+ylabel('h(t) [mVolt]', 'FontSize', 12, 'FontWeight', 'bold');
+title('Transfer function in time domain', 'FontSize', 12, 'FontWeight', 'bold');
+grid on;
+
+%print('bonus_wg_t', '-depsc');
